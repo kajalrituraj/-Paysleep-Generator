@@ -10,6 +10,7 @@ const styles = {
   border: "none",
   borderBottom: "1px dashed #e1ecfd",
   width: "50%",
+  outline:"none"
 };
 
 const Firstinput = () => {
@@ -51,7 +52,6 @@ const Firstinput = () => {
       sx={{
         height: "132px",
         width: "781px",
-        //   backgroundColor: "purple",
         padding: "0px 10px 20px",
         margin: "5px auto ",
         display: "block",
