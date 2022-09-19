@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -9,53 +9,59 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import FeatherIcon from "feather-icons-react";
 
-
-
 const Incomedetail = () => {
-  const [IncomeDetails, setIncomeDetails] = useState({
+  const [incomeDetails, setIncomeDetails] = useState({
     Basic: "",
     HouseRent: "",
-    IncomeTax: "",
-    providentFund: "",
   });
-
   const inputEvent = (event) => {
     console.log(event.target.value);
 
     const { value, name } = event.target;
-
     setIncomeDetails((preValue) => {
-      if (name === "Basic") {
-        return {
-          Basic: value,
-          HouseRent: preValue.HouseRent,
-          IncomeTax: preValue.IncomeTax,
-          providentFund: preValue.providentFund,
-        };
-      } else if (name === "HouseRent") {
-        return {
-          Basic: preValue.Basic,
-          HouseRent: value,
-          IncomeTax: preValue.IncomeTax,
-          providentFund: preValue.providentFund,
-        };
-      } else if (name === "IncomeTax") {
-        return {
-          Basic: preValue.Basic,
-          HouseRent: value.HouseRent,
-          IncomeTax: value,
-          providentFund: preValue.providentFund,
-        };
-      } else if (name === "providentFund") {
-        return {
-          Basic: preValue.Basic,
-          HouseRent: value.HouseRent,
-          IncomeTax: value.IncomeTax,
-          providentFund: value,
-        };
-      }
+      console.log(preValue);
+
+      return {
+        ...preValue,
+        [name]: value,
+      };
     });
   };
+  useEffect(() => {
+    Total(incomeDetails);
+  }, [incomeDetails]);
+
+  const [incomeTotal, setIncomeTotal] = useState(0);
+
+  const Total = (details) => {
+    let total = 0;
+
+    Object.values(details).forEach((income) => {
+      total += Number(income);
+    });
+
+    setIncomeTotal(total);
+  };
+
+  const [deductDetails, setDeductDetails] = useState({
+    IncomeTax: "",
+    providentFund: "",
+  });
+  const inputEventOne = (event) => {
+    console.log(event.target.value);
+
+    const { value, name } = event.target;
+
+    setDeductDetails((preValue) => {
+      console.log(preValue);
+
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
+
   return (
     <>
       <Box
@@ -73,7 +79,6 @@ const Incomedetail = () => {
         sx={{
           height: "236px",
           width: "766px",
-          // backgroundColor: "blue",
           margin: "0px 20px 0px 20px",
           border: " 1px solid #f5f5f8",
           boxShadow: "0 4px 9px 0 rgb(28 29 83 / 4%)",
@@ -154,7 +159,7 @@ const Incomedetail = () => {
                       placeholder="0"
                       name="Basic"
                       onChange={inputEvent}
-                      value={IncomeDetails.Basic}
+                      value={incomeDetails.Basic}
                     />
                   </TableCell>
                   <TableCell sx={{ border: "none" }}></TableCell>
@@ -192,8 +197,7 @@ const Incomedetail = () => {
                       placeholder="0"
                       name="HouseRent"
                       onChange={inputEvent}
-                      value={IncomeDetails.HouseRent}
-
+                      value={incomeDetails.HouseRent}
                     />
                   </TableCell>
                   <TableCell sx={{ border: "none" }}></TableCell>
@@ -256,8 +260,7 @@ const Incomedetail = () => {
               </TableHead>
 
               <TableBody>
-          
-              <TableRow
+                <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell
@@ -288,15 +291,14 @@ const Incomedetail = () => {
                       type="number"
                       placeholder="0"
                       name="IncomeTax"
-                      onChange={inputEvent}
-                      value={IncomeDetails.IncomeTax}
-
+                      onChange={inputEventOne}
+                      value={deductDetails.IncomeTax}
                     />
                   </TableCell>
                   <TableCell sx={{ border: "none" }}></TableCell>
                 </TableRow>
-                
-              <TableRow
+
+                <TableRow
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell
@@ -327,9 +329,8 @@ const Incomedetail = () => {
                       type="number"
                       placeholder="0"
                       name="providentFund"
-                      onChange={inputEvent}
-                      value={IncomeDetails.providentFund}
-
+                      onChange={inputEventOne}
+                      value={deductDetails.providentFund}
                     />
                   </TableCell>
                   <TableCell sx={{ border: "none" }}></TableCell>
@@ -390,7 +391,7 @@ const Incomedetail = () => {
                     width: "50%",
                   }}
                 >
-                  Rs. <span>0</span>
+                  Rs. <span>{incomeTotal}</span>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
