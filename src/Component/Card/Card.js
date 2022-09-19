@@ -5,6 +5,7 @@ import Paysummary from "../employeePay/Paysummary";
 import Firstinput from "../inputFirst/firstinput";
 import TotalnetPay from "../TotalNet/totalnetPay";
 import  Button from "../Button/button";
+import Incomedetail from "../incomeDetail/incomedetail";
 const Paycard = () => {
   return (
       <Box
@@ -20,8 +21,9 @@ const Paycard = () => {
         }}
       >
         <Logoupload />
-        <Firstinput />
+                <Firstinput />
         <Paysummary />
+        <Incomedetail/>
         <TotalnetPay/>
         <Button/>
       </Box>
