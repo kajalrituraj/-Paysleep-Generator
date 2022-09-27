@@ -3,7 +3,6 @@ import { Box } from "@mui/material";
 import Logoupload from "../uploadlogo/Logoupload";
 import Paysummary from "../employeePay/Paysummary";
 import Firstinput from "../inputFirst/firstinput";
-import TotalnetPay from "../TotalNet/totalnetPay";
 import  Button from "../Button/button";
 import Incomedetail from "../incomeDetail/incomedetail";
 const Paycard = () => {
@@ -24,7 +23,7 @@ const Paycard = () => {
                 <Firstinput />
         <Paysummary />
         <Incomedetail/>
-        <TotalnetPay/>
+     
         <Button/>
       </Box>
   );

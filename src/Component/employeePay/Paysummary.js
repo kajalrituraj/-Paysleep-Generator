@@ -1,8 +1,8 @@
-import { listItemSecondaryActionClasses } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
-import Addanother from "./addAnother";
+// import Addanother from "./addAnother";
 import FeatherIcon from "feather-icons-react";
+import { Grid } from "@mui/material";
 
 const Paysummary = () => {
   const [PaySummary, setPaySummary] = useState({
@@ -75,6 +75,26 @@ const Paysummary = () => {
         };
       }
     });
+  };
+
+  const [inputList, setinputList] = useState([]);
+
+  const handleinputchange = (e, index) => {
+    const { name, value } = e.target;
+
+    const list = [...inputList];
+    list[index][name] = value;
+    setinputList(list);
+  };
+
+  const handleremove = (index) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setinputList(list);
+  };
+
+  const handleaddclick = () => {
+    setinputList([...inputList, { name: "", value: "" }]);
   };
 
   return (
@@ -179,7 +199,7 @@ const Paysummary = () => {
               </lable>
               <span style={{ float: "right", paddingRight: "10px" }}>:</span>
             </Box>
-            
+
             <Box sx={{ width: "50%" }}>
               <input
                 style={{
@@ -198,9 +218,8 @@ const Paysummary = () => {
                 value={PaySummary.LossPayDays}
               />
             </Box>
-            
           </Box>
-          <Box
+          {/* <Box
                 sx={{
                   color: "blue",
                   float: "left",
@@ -219,7 +238,7 @@ const Paysummary = () => {
                   sx={{}}
                 />{" "}
                 Add another field
-              </Box>
+              </Box> */}
         </Box>
 
         <Box
@@ -323,12 +342,82 @@ const Paysummary = () => {
         </Box>
       </Box>
       <Box sx={{ height: "30px" }}></Box>
+
       <Box sx={{ display: "flex", width: "100%" }}>
-        <Box sx={{ width: "50%" }}>
-          <Addanother />
+        <Box sx={{ width: "100%", display: "flex" }}>
+          {/* <Addanother /> */}
+          <Grid container>
+            {inputList.map((x, index) => (
+              <Grid xs={6} sx={{ display: "flex", "&:hover": {} }}>
+                <input
+                  style={{
+                    width: "45%",
+                    display: "block",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    border: "none",
+                    borderBottom: "1px dashed #e1ecfd",
+                    padding: "10px 0px 10px 0px",
+                  }}
+                  type="text"
+                  placeholder="Eg: Krishnan"
+                  name="Cname"
+                  onChange={(e) => handleinputchange(e, index)}
+                />
+                <input
+                  style={{
+                    width: "45%",
+                    display: "block",
+                    fontSize: "14px",
+                    fontWeight: "400",
+                    border: "none",
+                    borderBottom: "1px dashed #e1ecfd",
+                    padding: "10px 0px 10px 0px",
+                  }}
+                  type="text"
+                  placeholder="Eg: Krishnan"
+                  name="Cname"
+                  onChange={(e) => handleinputchange(e, index)}
+                />
+                {/* {inputList.length!==1 && */}
+                <Box
+                  // onClick={()=>handleremove(index)}
+                  sx={{
+                    width: "10%",
+                    // backgroundColor: "red",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <FeatherIcon icon="minus-circle" color="red" size="16px" />
+                </Box>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
-        <Box sx={{ width: "50%" }}></Box>
       </Box>
+
+      {/* 
+      {inputList.length -1=== index && */}
+
+      <Box
+        onClick={handleaddclick}
+        sx={{
+          color: "blue",
+          float: "left",
+          padding: " 10px 20px 3px 0px",
+          "&:hover": {
+            textDecoration: "underline",
+            cursor: "pointer",
+          },
+        }}
+      >
+        <FeatherIcon icon="plus-circle" color="blue" size="16px" sx={{}} />
+        Add another field
+      </Box>
+
+      <Box sx={{ width: "50%" }}></Box>
     </Box>
   );
 };
