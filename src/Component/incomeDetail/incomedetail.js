@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,69 +8,84 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import FeatherIcon from "feather-icons-react";
-// import AddEarning from "./addEarning";
 
 const Incomedetail = () => {
-  const [incomeDetails, setIncomeDetails] = useState({
-    Basic: "",
-    HouseRent: "",
-  });
-  const inputEvent = (event) => {
-    const { value, name } = event.target;
-    setIncomeDetails((preValue) => {
-      console.log(preValue);
+  const [incomeDetails, setIncomeDetails] = useState([
+    { placeholder: "Basic", value: 0.0 },
+    { placeholder: "House Rent Allowance", value: 0.0 },
+  ]);
 
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
+  const [earningTotal, setEarningTotal] = useState(0.0);
+
+  const inputChange = (event, index) => {
+    const { name, value } = event.target;
+
+    const list = [...incomeDetails];
+    list[index][name] = value;
+    setIncomeDetails(list);
   };
+
+  const handleAddNewEarning = () => {
+    setIncomeDetails([
+      ...incomeDetails,
+      { placeholder: "Earning Name", value: 0.0 },
+    ]);
+  };
+
   useEffect(() => {
-    setIncomeTotal(Total(incomeDetails));
+    const list = [...incomeDetails];
+    let total = 0;
+    list.map((item) => {
+      total += parseFloat(item["value"]);
+      return total;
+    });
+    setEarningTotal(total);
   }, [incomeDetails]);
 
-  const [incomeTotal, setIncomeTotal] = useState(0);
+  const [deductDetails, setDeductDetails] = useState([
+    { placeholder: "Basic", value: 0.0 },
+    { placeholder: "Provident Fund", value: 0.0 },
+  ]);
 
-  const Total = (details) => {
-    let total = 0;
+  const [deductionTotal, setDeductionTotal] = useState(0.0);
 
-    Object.values(details).forEach((income) => {
-      total += Number(income);
-    });
+  const inputChangeDeduction = (event, index) => {
+    const { name, value } = event.target;
 
-    return total;
+    const list = [...deductDetails];
+    list[index][name] = value;
+    setDeductDetails(list);
   };
 
-  const [deductDetails, setDeductDetails] = useState({
-    IncomeTax: "",
-    providentFund: "",
-  });
-  const inputEventOne = (event) => {
-    console.log(event.target.value);
-
-    const { value, name } = event.target;
-
-    setDeductDetails((preValue) => {
-      console.log(preValue);
-
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
+  const handleAddNewDeduction = () => {
+    setDeductDetails([
+      ...deductDetails,
+      { placeholder: "Deduction Name", value: 0.0 },
+    ]);
   };
-
-  const [deductTotal, setDeductTotal] = useState(0);
 
   useEffect(() => {
-    setDeductTotal(Total(deductDetails));
+    const list = [...deductDetails];
+    let total = 0;
+    list.map((item) => {
+      total += parseFloat(item["value"]);
+      return total;
+    });
+    setDeductionTotal(total);
   }, [deductDetails]);
+
+
 
   const [TotalNet, setTotalNet] = useState(0);
   useEffect(() => {
-    setTotalNet(incomeTotal - deductTotal);
-  }, [incomeTotal, deductTotal]);
+    setTotalNet(earningTotal - deductionTotal);
+  }, [earningTotal, deductionTotal]);
+
+
+  // create new sytate for net payable and initialize with 0
+  // useeffect which changes on earningTotal or deductionTotal
+  // In useeffect calculate earning - deductionTotal
+  // and then set setnetpayable with calculated value
 
   return (
     <>
@@ -87,7 +102,6 @@ const Incomedetail = () => {
       </Box>
       <Box
         sx={{
-          height: "236px",
           width: "766px",
           margin: "0px 20px 0px 20px",
           border: " 1px solid #f5f5f8",
@@ -134,166 +148,68 @@ const Incomedetail = () => {
               </TableHead>
 
               <TableBody>
-                {/* Row 1 */}
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {/* Basic */}
-                  <TableCell
-                    sx={{
-                      border: "none",
-                      height: "28px",
-                      padding: " 10px 20px 3px 20px",
-                      width: "80%",
-                    }}
+                {incomeDetails.map((item, index) => (
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                    {/* <Typography>Basic</Typography> */}
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "16px",
-                        width: "100%",
-                        outline: "none",
+                    {/* Basic */}
+                    <TableCell
+                      sx={{
                         border: "none",
-                      }}
-                      type="text"
-                      placeholder="Basic"
-                      readOnly={true}
-                      name="Basic"
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
                         height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
+                        padding: " 10px 20px 3px 20px",
+                        width: "80%",
                       }}
-                      type="number"
-                      placeholder="0"
-                      name="Basic"
-                      onChange={inputEvent}
-                      value={incomeDetails.Basic}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
-                {/* Row 2 */}
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  {/* House Rent Allowance */}
-                  <TableCell
-                    sx={{
-                      border: "none",
-                      height: "28px",
-                      padding: " 0px 20px 3px 20px",
-                      width: "80%",
-                    }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "16px",
-                        width: "100%",
-                        outline: "none",
-                        border: "none",
-                      }}
-                      type="text"
-                      placeholder="House Rent Allowance"
-                      readOnly={true}
-                      name="HouseRent"
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
-                      }}
-                      type="number"
-                      placeholder="0"
-                      name="HouseRent"
-                      onChange={inputEvent}
-                      value={incomeDetails.HouseRent}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
-              </TableBody>
-              {/* <AddEarning /> */}
-
-              {/* add another field */}
-
-              <TableBody>
-                <TableRow>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "16px",
-                        paddingLeft: "20px",
-                        width: "100%",
-                        outline: "none",
-                        border: "none",
-                      }}
-                      type="text"
-                      placeholder="Earning Name"
-                      name="Cname"
-                    />
-                  </TableCell>
-
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
-                      }}
-                      type="number"
-                      placeholder="0"
-                      name="Cname"
-                      // onChange={inputEvent}
-                      //   value={row.value}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
+                    >
+                      <input
+                        style={{
+                          display: "block",
+                          height: "28px",
+                          fontSize: "16px",
+                          width: "100%",
+                          outline: "none",
+                          border: "none",
+                        }}
+                        type="text"
+                        readOnly={index < 2 ? true : false}
+                        placeholder={item["placeholder"]}
+                        name="placeholder"
+                        onChange={function (event) {
+                          inputChange(event, index);
+                        }}
+                        value={item["placeholder"]}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ border: "none", height: "28px", padding: "0px" }}
+                    >
+                      <input
+                        style={{
+                          display: "block",
+                          height: "28px",
+                          fontSize: "20px",
+                          fontWeight: "500",
+                          border: "none",
+                          borderBottom: "1px dashed #e1ecfd",
+                          width: "100%",
+                          outline: "none",
+                        }}
+                        type="number"
+                        placeholder={item["value"]}
+                        name="value"
+                        onChange={(event) => inputChange(event, index)}
+                        value={item["value"]}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ border: "none" }}></TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
 
               {/* Add Earning Button */}
               <Box
+                onClick={handleAddNewEarning}
                 sx={{
                   color: "blue",
                   float: "left",
@@ -305,21 +221,18 @@ const Incomedetail = () => {
                 }}
               >
                 {" "}
-                <FeatherIcon
-                  icon="plus-circle"
-                  color="blue"
-                  size="16px"
-                  sx={{}}
-                />{" "}
-                Add Earnings
+                <FeatherIcon icon="plus-circle" color="blue" size="16px" /> Add
+                Earnings
               </Box>
             </Table>
           </TableContainer>
+
           <TableContainer component={Paper} sx={{ width: "50%" }}>
             <Table
               sx={{ width: "100%", backgroundColor: "" }}
               aria-label="simple table"
             >
+              {/* Deductions Heading */}
               <TableHead>
                 <TableRow>
                   <TableCell
@@ -349,148 +262,68 @@ const Incomedetail = () => {
               </TableHead>
 
               <TableBody>
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell
-                    sx={{
-                      border: "none",
-                      height: "28px",
-                      padding: " 10px 20px 3px 20px",
-                      width: "80%",
-                    }}
+                {deductDetails.map((item, index) => (
+                  <TableRow
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
-                   
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "16px",
-                        width: "100%",
-                        outline: "none",
+                    {/* Basic */}
+                    <TableCell
+                      sx={{
                         border: "none",
-                      }}
-                      type="text"
-                      placeholder="Income Tax"
-                      readOnly={true}
-                      name="Basic"
-                    />
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
                         height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
+                        padding: " 10px 20px 3px 20px",
+                        width: "80%",
                       }}
-                      type="number"
-                      placeholder="0"
-                      name="IncomeTax"
-                      onChange={inputEventOne}
-                      value={deductDetails.IncomeTax}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
-
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell
-                    sx={{
-                      border: "none",
-                      height: "28px",
-                      padding: " 10px 20px 3px 20px",
-                      width: "80%",
-                    }}
-                  >
-                    <Typography>provident Fund</Typography>
-                  </TableCell>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
-                      }}
-                      type="number"
-                      placeholder="0"
-                      name="providentFund"
-                      onChange={inputEventOne}
-                      value={deductDetails.providentFund}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
+                    >
+                      <input
+                        style={{
+                          display: "block",
+                          height: "28px",
+                          fontSize: "16px",
+                          width: "100%",
+                          outline: "none",
+                          border: "none",
+                        }}
+                        type="text"
+                        readOnly={index < 2 ? true : false}
+                        placeholder={item["placeholder"]}
+                        name="placeholder"
+                        onChange={function (event) {
+                          inputChangeDeduction(event, index);
+                        }}
+                        value={item["placeholder"]}
+                      />
+                    </TableCell>
+                    <TableCell
+                      align="right"
+                      sx={{ border: "none", height: "28px", padding: "0px" }}
+                    >
+                      <input
+                        style={{
+                          display: "block",
+                          height: "28px",
+                          fontSize: "20px",
+                          fontWeight: "500",
+                          border: "none",
+                          borderBottom: "1px dashed #e1ecfd",
+                          width: "100%",
+                          outline: "none",
+                        }}
+                        type="number"
+                        placeholder={item["value"]}
+                        name="value"
+                        onChange={(event) => inputChangeDeduction(event, index)}
+                        value={item["value"]}
+                      />
+                    </TableCell>
+                    <TableCell sx={{ border: "none" }}></TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
 
-              <TableBody>
-                <TableRow>
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "16px",
-                        paddingLeft: "20px",
-                        width: "100%",
-                        outline: "none",
-                        border: "none",
-                      }}
-                      type="text"
-                      placeholder="Earning Name"
-                      name="Cname"
-                      // onChange={inputEvent}
-                      //   value={row.value}
-                    />
-                  </TableCell>
-
-                  <TableCell
-                    align="right"
-                    sx={{ border: "none", height: "28px", padding: "0px" }}
-                  >
-                    <input
-                      style={{
-                        display: "block",
-                        height: "28px",
-                        fontSize: "20px",
-                        fontWeight: "500",
-                        border: "none",
-                        borderBottom: "1px dashed #e1ecfd",
-                        width: "100%",
-                        outline: "none",
-                      }}
-                      type="number"
-                      placeholder="0*"
-                      name="Cname"
-                      // onChange={inputEvent}
-                      //   value={row.value}
-                    />
-                  </TableCell>
-                  <TableCell sx={{ border: "none" }}></TableCell>
-                </TableRow>
-              </TableBody>
 
               <Box
+                onClick={handleAddNewDeduction}
                 sx={{
                   color: "blue",
                   float: "left",
@@ -513,12 +346,14 @@ const Incomedetail = () => {
             </Table>
           </TableContainer>
         </Box>
+
+        {/* Gross Earning Amount  */}
+
         <Box sx={{ display: "flex" }}>
           <Box
             sx={{
               height: "50px",
               width: "50%",
-              backgroundColor: "yellow",
             }}
           >
             <TableHead sx={{ backgroundColor: "#f9f9fb" }}>
@@ -545,7 +380,7 @@ const Incomedetail = () => {
                     width: "50%",
                   }}
                 >
-                  Rs. <span>{incomeTotal}</span>
+                  Rs. <span>{earningTotal}</span>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -583,7 +418,7 @@ const Incomedetail = () => {
                     fontSize: "15px",
                   }}
                 >
-                  Rs.<span>{deductTotal}</span>
+                  Rs.<span>{deductionTotal}</span>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -591,6 +426,8 @@ const Incomedetail = () => {
           </Box>
         </Box>
       </Box>
+
+      {/* Total Net Payable */}
       <Box
         sx={{
           height: "51px",

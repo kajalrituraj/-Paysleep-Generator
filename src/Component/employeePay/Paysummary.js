@@ -115,12 +115,14 @@ const Paysummary = () => {
           height: "114px",
           width: "766px",
           display: "flex",
-          marginBottom: " 15px",
+          marginBottom: "0px",
           paddingTop: "20px",
           borderTop: "1px solid #f3f3f6",
           // backgroundColor:"red"
         }}
       >
+  {/* first input field of Employ Pay Summary */}
+      
         <Box
           sx={{
             height: "114px",
@@ -128,7 +130,7 @@ const Paysummary = () => {
             textAlign: "left",
           }}
         >
-          <Box sx={{ width: "100%", height: "calc(100%/3)", display: "flex" }}>
+          <Box sx={{ width: "100%", height: "calc(100%/3)", display: "flex",}}>
             <Box sx={{ width: "50%" }}>
               <lable
                 style={{
@@ -219,27 +221,9 @@ const Paysummary = () => {
               />
             </Box>
           </Box>
-          {/* <Box
-                sx={{
-                  color: "blue",
-                  float: "left",
-                  padding: " 10px 20px 3px 0px",
-                  "&:hover": {
-                    textDecoration: "underline",
-                    cursor: "pointer",
-                  },
-                }}
-              >
-                {" "}
-                <FeatherIcon
-                  icon="plus-circle"
-                  color="blue"
-                  size="16px"
-                  sx={{}}
-                />{" "}
-                Add another field
-              </Box> */}
         </Box>
+  {/* Second input field of Employ Pay Summary */}
+    
 
         <Box
           sx={{
@@ -247,6 +231,7 @@ const Paysummary = () => {
             width: "50%",
             textAlign: "left",
             marginLeft: "80px",
+            // backgroundColor: "red",
           }}
         >
           <Box sx={{ width: "100%", height: "calc(100%/3)", display: "flex" }}>
@@ -340,15 +325,16 @@ const Paysummary = () => {
             </Box>
           </Box>
         </Box>
+
       </Box>
-      <Box sx={{ height: "30px" }}></Box>
+  
 
       <Box sx={{ display: "flex", width: "100%" }}>
         <Box sx={{ width: "100%", display: "flex" }}>
           {/* <Addanother /> */}
           <Grid container>
             {inputList.map((x, index) => (
-              <Grid xs={6} sx={{ display: "flex", "&:hover": {} }}>
+              <Grid xs={6} sx={{ display: "flex", justifyContent:"space-between","&:hover": {} }}>
                 <input
                   style={{
                     width: "45%",
@@ -375,7 +361,7 @@ const Paysummary = () => {
                     padding: "10px 0px 10px 0px",
                   }}
                   type="text"
-                  placeholder="Eg: Krishnan"
+                  placeholder="Eg: Krhnan"
                   name="Cname"
                   onChange={(e) => handleinputchange(e, index)}
                 />
